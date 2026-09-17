@@ -1,5 +1,11 @@
-NSL Public Website V1 prototype
-Open index.html to preview.
-Telegram button uses the supplied NSL results channel invite link.
-Live section is a visual placeholder. Replace with the official YouTube Live embed URL when available.
-Production integration: connect Results History and current draw to the NSL back-office database/API; publish only verified results.
+NSL Public Website V2
+- New official NSL logo from the supplied Google Drive folder
+- Responsive official navy/white/gold design
+- Current product only: 2D / 3D / 4D (WIN6+ intentionally excluded)
+- GitHub Pages-safe relative asset paths
+- Telegram link included
+- Live Draw area ready for official YouTube Live embed
+- Results History ready to connect to NSL back-office HTTPS API
+
+Preview: open index.html
+GitHub Pages: upload contents of this folder to repository root.
