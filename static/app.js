@@ -8,25 +8,35 @@ const SOURCES=[
 ];
 const frame=document.querySelector('#resultFrame'), wait=document.querySelector('#waitingAnimation'), pill=document.querySelector('#feedPill'), title=document.querySelector('#feedTitle'), sub=document.querySelector('#feedSub'), countdown=document.querySelector('#countdown'), sourceLabel=document.querySelector('#sourceLabel'), fallback=document.querySelector('#sourceFallback');
 let activeUrl='';
-function bangkokNow(){
- const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
- return Object.fromEntries(parts.filter(x=>x.type!=='literal').map(x=>[x.type,Number(x.value)]));
+const nextSourceLabel=document.querySelector('#nextSourceLabel');
+function feedState(date=new Date()){
+ // UTC arithmetic keeps the schedule independent of the visitor's device timezone.
+ const local=new Date(date.getTime()+7*3600000);
+ const seconds=local.getUTCHours()*3600+local.getUTCMinutes()*60+local.getUTCSeconds();
+ const first=SOURCES[0].hour*3600+SOURCES[0].minute*60;
+ const second=SOURCES[1].hour*3600+SOURCES[1].minute*60;
+ if(seconds<first) return {active:null,next:SOURCES[0],remaining:first-seconds,tomorrow:false};
+ if(seconds<second) return {active:SOURCES[0],next:SOURCES[1],remaining:second-seconds,tomorrow:false};
+ return {active:SOURCES[1],next:SOURCES[0],remaining:86400+first-seconds,tomorrow:true};
 }
-function secondsTo(h,m,now){return (h*3600+m*60)-(now.hour*3600+now.minute*60+now.second)}
-function fmt(sec){sec=Math.max(0,sec);return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(n=>String(n).padStart(2,'0')).join(':')}
-function showWaiting(next,sec){
- frame.hidden=true; wait.hidden=false; pill.textContent='WAITING'; pill.classList.remove('is-live'); title.textContent='Waiting for Official Result'; sub.textContent=`Next source opens automatically at ${String(next.hour).padStart(2,'0')}:${String(next.minute).padStart(2,'0')}`; countdown.textContent=fmt(sec); sourceLabel.textContent='Schedule: 18:30 / 19:30 (UTC+7)'; fallback.hidden=true;
-}
-function showSource(src){
- wait.hidden=true; frame.hidden=false; pill.textContent='LIVE'; pill.classList.add('is-live'); sourceLabel.textContent=src.label; fallback.href=src.url; fallback.hidden=false;
- if(activeUrl!==src.url){ activeUrl=src.url; frame.src=src.url; }
-}
+function fmt(sec){return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60].map(n=>String(n).padStart(2,'0')).join(':')}
 function updateFeed(){
- const n=bangkokNow(), t=n.hour*60+n.minute;
- if(t<18*60+30){showWaiting(SOURCES[0],secondsTo(18,30,n));return}
- if(t<19*60+30){showSource(SOURCES[0]);return}
- showSource(SOURCES[1]);
+ const state=feedState();
+ const nextTime=String(state.next.hour).padStart(2,'0')+':'+String(state.next.minute).padStart(2,'0');
+ nextSourceLabel.textContent='Next source: '+nextTime+(state.tomorrow?' tomorrow':' today')+' (UTC+7)';
+ countdown.textContent=fmt(state.remaining);
+ if(!state.active){
+  frame.hidden=true; wait.hidden=false; pill.textContent='WAITING'; pill.classList.remove('is-live');
+  title.textContent='Waiting for Official Result'; sub.textContent='Next source opens automatically at '+nextTime+' (UTC+7)';
+  sourceLabel.textContent='Schedule: 18:30 / 19:30 (UTC+7)'; fallback.hidden=true;
+  if(activeUrl){frame.removeAttribute('src');activeUrl='';}
+  return;
+ }
+ const src=state.active;
+ wait.hidden=true; frame.hidden=false; pill.textContent='SOURCE'; pill.classList.add('is-live');
+ sourceLabel.textContent=src.label+' (UTC+7)'; fallback.href=src.url; fallback.hidden=false;
+ if(activeUrl!==src.url){activeUrl=src.url;frame.src=src.url;}
 }
 updateFeed();setInterval(updateFeed,1000);
-// Refresh the active provider periodically during result time without flashing the page.
+// Refresh only while a scheduled source is visible.
 setInterval(()=>{if(activeUrl&&!frame.hidden) frame.src=activeUrl;},60000);
