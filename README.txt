@@ -9,3 +9,10 @@ NSL Public Website V2
 
 Preview: open index.html
 GitHub Pages: upload contents of this folder to repository root.
+
+
+V5 update:
+- The final NSL draw of each day is 20:00.
+- Removed the incorrect Next draw: 21:00 label; it now shows Final draw of the day.
+- Results History date filter is prepared through 01 October 2026.
+- No 01 October 2026 sales/results figures are fabricated; update them only after accounting supplies the confirmed data.
