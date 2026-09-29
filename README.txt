@@ -1,18 +1,13 @@
-NSL Public Website V2
-- New official NSL logo from the supplied Google Drive folder
-- Responsive official navy/white/gold design
-- Current product only: 2D / 3D / 4D (WIN6+ intentionally excluded)
-- GitHub Pages-safe relative asset paths
-- Telegram link included
-- Live Draw area ready for official YouTube Live embed
-- Results History ready to connect to NSL back-office HTTPS API
+NSL Public Website V6 — Functional Rounds & History
 
-Preview: open index.html
-GitHub Pages: upload contents of this folder to repository root.
+Changes from V5:
+- Draw-time selector now includes all official daily rounds: 09:00, 11:00, 14:00, 16:00, 18:00, 20:00.
+- 20:00 is treated as the final draw of the day; no 21:00 draw is shown.
+- Results History date range and draw-time filters work.
+- Pagination is functional with page numbers, Previous and Next controls.
+- Clicking a history row opens that draw in the main result panel.
+- Historical result data from the supplied Results 2026 workbook is included from April 2026 onward.
+- 01/10/2026 remains reserved for the next confirmed accounting/result update; no unverified result is fabricated.
+- Mobile layout from V3 is preserved.
 
-
-V5 update:
-- The final NSL draw of each day is 20:00.
-- Removed the incorrect Next draw: 21:00 label; it now shows Final draw of the day.
-- Results History date filter is prepared through 01 October 2026.
-- No 01 October 2026 sales/results figures are fabricated; update them only after accounting supplies the confirmed data.
+For GitHub Pages: upload the CONTENTS of nsl-public-site/ to the repository root.
