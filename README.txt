@@ -11,3 +11,5 @@ Changes from V5:
 - Mobile layout from V3 is preserved.
 
 For GitHub Pages: upload the CONTENTS of nsl-public-site/ to the repository root.
+
+V7 fix: Results History Search button uses a form submit handler plus click fallback; date range and draw-time filters are applied immediately to the 959 bundled verified records.

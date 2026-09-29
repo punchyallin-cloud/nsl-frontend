@@ -33,12 +33,12 @@
   <section class="history" id="results">
     <div class="history-head">
       <div><span class="eyebrow">OFFICIAL ARCHIVE</span><h2>Results History</h2></div>
-      <div class="filters">
-        <label>From<input id="from-date" type="date" value="2026-04-01"></label>
-        <label>To<input id="to-date" type="date" value="2026-10-01"></label>
-        <label>Draw<select id="history-time"><option value="">All Draws</option></select></label>
-        <button id="search-results" type="button">Search</button>
-      </div>
+      <form class="filters" id="history-filter-form">
+        <label>From<input id="from-date" name="from_date" type="date" value="2026-04-01"></label>
+        <label>To<input id="to-date" name="to_date" type="date" value="2026-10-01"></label>
+        <label>Draw<select id="history-time" name="draw_time"><option value="">All Draws</option></select></label>
+        <button id="search-results" type="submit">Search</button>
+      </form>
     </div>
     <div id="history-summary" class="history-summary"></div>
     <div class="tablewrap">

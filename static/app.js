@@ -23,10 +23,19 @@ function populateSchedules(){
   $('#draw-time').value=state.currentTime;
 }
 function applyFilters(){
-  const from=$('#from-date').value||'0000-01-01'; const to=$('#to-date').value||'9999-12-31'; const time=$('#history-time').value;
+  const fromEl=$('#from-date'),toEl=$('#to-date'),timeEl=$('#history-time');
+  const from=fromEl && fromEl.value ? fromEl.value : '0000-01-01';
+  const to=toEl && toEl.value ? toEl.value : '9999-12-31';
+  const time=timeEl ? timeEl.value : '';
+  if(from>to){
+    if($('#history-summary')) $('#history-summary').textContent='The From date must be earlier than or equal to the To date.';
+    return;
+  }
   state.filtered=state.records.filter(r=>r.date>=from&&r.date<=to&&(!time||r.time===time));
-  state.page=1; renderHistory();
+  state.page=1;
+  renderHistory();
 }
+
 function rowHtml(r){return `<tr class="history-row" data-date="${r.date}" data-time="${r.time}" title="Open this draw"><td>${r.date}</td><td>${r.time}</td><td><b>${r['2D'].join(' · ')}</b><small>${r.issue2}</small></td><td><b>${r['3D'].join(' · ')}</b><small>${r.issue3}</small></td><td><b>${r['4D'].join(' · ')}</b><small>${r.issue4}</small></td></tr>`}
 function renderHistory(){
   const total=state.filtered.length,totalPages=Math.max(1,Math.ceil(total/state.pageSize)); if(state.page>totalPages)state.page=totalPages;
@@ -54,8 +63,13 @@ async function init(){
     const latest=state.records[0]; state.currentDate=latest.date; state.currentTime=latest.time;
     populateSchedules(); renderCurrent(); applyFilters();
     $('#draw-time').addEventListener('change',e=>{state.currentTime=e.target.value;renderCurrent()});
-    $('#search-results').addEventListener('click',applyFilters);
+    const form=$('#history-filter-form');
+    if(form) form.addEventListener('submit',e=>{e.preventDefault();applyFilters();});
+    const searchBtn=$('#search-results');
+    if(searchBtn) searchBtn.addEventListener('click',e=>{e.preventDefault();applyFilters();});
     $('#history-time').addEventListener('change',applyFilters);
+    $('#from-date').addEventListener('change',()=>{state.page=1;});
+    $('#to-date').addEventListener('change',()=>{state.page=1;});
   }catch(err){console.error(err);$('#draws').innerHTML='<div class="no-result"><strong>Unable to load result data.</strong><span>Please refresh the page.</span></div>'}
 }
 init();
