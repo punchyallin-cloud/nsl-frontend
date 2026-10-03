@@ -13,3 +13,9 @@ Changes from V5:
 For GitHub Pages: upload the CONTENTS of nsl-public-site/ to the repository root.
 
 V7 fix: Results History Search button uses a form submit handler plus click fallback; date range and draw-time filters are applied immediately to the 959 bundled verified records.
+
+
+V9 data update (03 Oct 2026):
+- Results archive refreshed from Results 2026(1).xlsx.
+- Latest verified draw: 01 Oct 2026 20:00.
+- October source sheet rows were labeled 2026-09-01; interpreted as 2026-10-01 based on the October-2026 sheet and chronological sequence.
